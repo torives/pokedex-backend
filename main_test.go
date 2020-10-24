@@ -14,12 +14,7 @@ func TestPokedex(t *testing.T) {
 
 		PokedexServer(response, request)
 
-		got := response.Body.String()
-		want := "Bulbassaur"
-
-		if got != want {
-			t.Errorf("got %q, wanted %q", got, want)
-		}
+		assertResponseBody(t, response.Body.String(), "Bulbassaur")
 	})
 
 	t.Run("returns 2nd pokemon name", func(t *testing.T) {
@@ -28,12 +23,7 @@ func TestPokedex(t *testing.T) {
 
 		PokedexServer(response, request)
 
-		got := response.Body.String()
-		want := "Ivysaur"
-
-		if got != want {
-			t.Errorf("got %q, wanted %q", got, want)
-		}
+		assertResponseBody(t, response.Body.String(), "Ivysaur")
 	})
 }
 
@@ -42,3 +32,9 @@ func newGetPokemonRequest(index string) *http.Request {
 	return request
 }
 
+func assertResponseBody(t *testing.T, got, want string) {
+	t.Helper()
+	if got != want {
+		t.Errorf("got %q, wanted %q", got, want)
+	}
+}
