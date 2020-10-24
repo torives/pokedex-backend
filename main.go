@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 )
 
 func main() {
@@ -14,5 +15,15 @@ func main() {
 }
 
 func PokedexServer(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "Bulbassaur")
+	index := strings.TrimPrefix(r.URL.Path, "/pokemon/")
+
+	if index == "1" {
+		fmt.Fprint(w, "Bulbassaur")
+		return
+	}
+
+	if index == "2" {
+		fmt.Fprint(w, "Ivysaur")
+		return
+	}
 }
