@@ -8,11 +8,19 @@ import (
 )
 
 func TestPokedex(t *testing.T) {
+	store := StubPokemonStore{
+		map[string]string{
+			"1": "Bulbassaur",
+			"2": "Ivysaur",
+		},
+	}
+	server := &PokedexServer{&store}
+
 	t.Run("returns 1st pokemon name", func(t *testing.T) {
 		request := newGetPokemonRequest("1")
 		response := httptest.NewRecorder()
 
-		PokedexServer(response, request)
+		server.ServeHTTP(response, request)
 
 		assertResponseBody(t, response.Body.String(), "Bulbassaur")
 	})
@@ -21,7 +29,7 @@ func TestPokedex(t *testing.T) {
 		request := newGetPokemonRequest("2")
 		response := httptest.NewRecorder()
 
-		PokedexServer(response, request)
+		server.ServeHTTP(response, request)
 
 		assertResponseBody(t, response.Body.String(), "Ivysaur")
 	})
@@ -37,4 +45,13 @@ func assertResponseBody(t *testing.T, got, want string) {
 	if got != want {
 		t.Errorf("got %q, wanted %q", got, want)
 	}
+}
+
+type StubPokemonStore struct {
+	scores map[string]string
+}
+
+func (s *StubPokemonStore) PokemonName(index string) string {
+	name := s.scores[index]
+	return name
 }
