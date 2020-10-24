@@ -17,13 +17,17 @@ func main() {
 func PokedexServer(w http.ResponseWriter, r *http.Request) {
 	index := strings.TrimPrefix(r.URL.Path, "/pokemon/")
 
+	name := PokemonName(index)
+
+	fmt.Fprint(w, name)
+}
+
+func PokemonName(index string) string {
 	if index == "1" {
-		fmt.Fprint(w, "Bulbassaur")
-		return
+		return "Bulbassaur"
+	} else if index == "2" {
+		return "Ivysaur"
 	}
 
-	if index == "2" {
-		fmt.Fprint(w, "Ivysaur")
-		return
-	}
+	return ""
 }
