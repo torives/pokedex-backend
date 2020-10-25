@@ -33,6 +33,20 @@ func TestPokedex(t *testing.T) {
 
 		assertResponseBody(t, response.Body.String(), "Ivysaur")
 	})
+
+	t.Run("returns 404 on invalid pokemon", func(t *testing.T) {
+		request := newGetPokemonRequest("9999")
+		response := httptest.NewRecorder()
+
+		server.ServeHTTP(response, request)
+
+		got := response.Code
+		want := http.StatusNotFound
+
+		if got != want {
+			t.Errorf("got status %d, wanted %d", got, want)
+		}
+	})
 }
 
 func newGetPokemonRequest(index string) *http.Request {
