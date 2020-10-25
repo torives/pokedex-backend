@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	server := new(PokedexServer)
+	server := &PokedexServer{&InMemoryPokemonStore{}}
 
 	if err := http.ListenAndServe(":8080", server); err != nil {
 		log.Fatalf("Could not listen on port 8080. %v", err)
@@ -25,5 +25,14 @@ type PokedexServer struct {
 
 func (s *PokedexServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	index := strings.TrimPrefix(r.URL.Path, "/pokemon/")
+
+	w.WriteHeader(http.StatusNotFound)
+
 	fmt.Fprint(w, s.store.PokemonName(index))
+}
+
+type InMemoryPokemonStore struct{}
+
+func (i *InMemoryPokemonStore) PokemonName(index string) string {
+	return "oi"
 }
