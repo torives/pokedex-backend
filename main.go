@@ -26,9 +26,13 @@ type PokedexServer struct {
 func (s *PokedexServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	index := strings.TrimPrefix(r.URL.Path, "/pokemon/")
 
-	w.WriteHeader(http.StatusNotFound)
+	name := s.store.PokemonName(index)
 
-	fmt.Fprint(w, s.store.PokemonName(index))
+	if name == "" {
+		w.WriteHeader(http.StatusNotFound)
+	}
+
+	fmt.Fprint(w, name)
 }
 
 type InMemoryPokemonStore struct{}
