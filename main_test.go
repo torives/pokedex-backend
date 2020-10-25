@@ -22,6 +22,7 @@ func TestPokedex(t *testing.T) {
 
 		server.ServeHTTP(response, request)
 
+		assertStatusCode(t, response.Code, http.StatusOK)
 		assertResponseBody(t, response.Body.String(), "Bulbassaur")
 	})
 
@@ -31,6 +32,7 @@ func TestPokedex(t *testing.T) {
 
 		server.ServeHTTP(response, request)
 
+		assertStatusCode(t, response.Code, http.StatusOK)
 		assertResponseBody(t, response.Body.String(), "Ivysaur")
 	})
 
@@ -40,12 +42,7 @@ func TestPokedex(t *testing.T) {
 
 		server.ServeHTTP(response, request)
 
-		got := response.Code
-		want := http.StatusNotFound
-
-		if got != want {
-			t.Errorf("got status %d, wanted %d", got, want)
-		}
+		assertStatusCode(t, response.Code, http.StatusNotFound)
 	})
 }
 
@@ -58,6 +55,12 @@ func assertResponseBody(t *testing.T, got, want string) {
 	t.Helper()
 	if got != want {
 		t.Errorf("got %q, wanted %q", got, want)
+	}
+}
+
+func assertStatusCode(t *testing.T, got, want int) {
+	if got != want {
+		t.Errorf("did not get correct status code. Got %d, wanted %d", got, want)
 	}
 }
 
