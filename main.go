@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	server := &PokedexServer{&InMemoryPokemonStore{}}
+	server := &PokedexServer{NewInMemoryPokemonStore()}
 
 	if err := http.ListenAndServe(":8080", server); err != nil {
 		log.Fatalf("Could not listen on port 8080. %v", err)
@@ -35,8 +35,19 @@ func (s *PokedexServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, name)
 }
 
-type InMemoryPokemonStore struct{}
+type InMemoryPokemonStore struct {
+	store map[string]string
+}
+
+func NewInMemoryPokemonStore() *InMemoryPokemonStore {
+	return &InMemoryPokemonStore{
+		map[string]string{
+			"1": "Bulbassaur",
+			"2": "Ivysaur",
+		},
+	}
+}
 
 func (i *InMemoryPokemonStore) PokemonName(index string) string {
-	return "oi"
+	return i.store[index]
 }

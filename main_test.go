@@ -46,6 +46,18 @@ func TestPokedex(t *testing.T) {
 	})
 }
 
+func TestIntegration(t *testing.T) {
+	store := NewInMemoryPokemonStore()
+	server := PokedexServer{store}
+	index := "1"
+	response := httptest.NewRecorder()
+
+	server.ServeHTTP(response, newGetPokemonRequest(index))
+
+	assertStatusCode(t, response.Code, http.StatusOK)
+	assertResponseBody(t, response.Body.String(), "Bulbassaur")
+}
+
 func newGetPokemonRequest(index string) *http.Request {
 	request, _ := http.NewRequest(http.MethodGet, fmt.Sprintf("/pokemon/%s", index), nil)
 	return request
