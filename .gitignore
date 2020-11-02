@@ -5,6 +5,7 @@
 *.so
 *.dylib
 pokedex
+__debug_bin
 
 # Test binary, built with ?   	github.com/torives/pokedex	[no test files]
 *.test
@@ -14,4 +15,3 @@ pokedex
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
-
