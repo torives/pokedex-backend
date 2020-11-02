@@ -10,7 +10,7 @@ import (
 func TestPokedex(t *testing.T) {
 	store := StubPokemonStore{
 		map[string]string{
-			"1": "Bulbassaur",
+			"1": "Bulbasaur",
 			"2": "Ivysaur",
 		},
 	}
@@ -23,7 +23,7 @@ func TestPokedex(t *testing.T) {
 		server.ServeHTTP(response, request)
 
 		assertStatusCode(t, response.Code, http.StatusOK)
-		assertResponseBody(t, response.Body.String(), "Bulbassaur")
+		assertResponseBody(t, response.Body.String(), "Bulbasaur")
 	})
 
 	t.Run("returns 2nd pokemon name", func(t *testing.T) {
@@ -64,7 +64,7 @@ func TestIntegration(t *testing.T) {
 	server.ServeHTTP(response, newGetPokemonRequest(index))
 
 	assertStatusCode(t, response.Code, http.StatusOK)
-	assertResponseBody(t, response.Body.String(), "Bulbassaur")
+	assertResponseBody(t, response.Body.String(), "Bulbasaur")
 }
 
 func newGetPokemonRequest(index string) *http.Request {

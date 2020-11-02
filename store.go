@@ -11,7 +11,7 @@ type InMemoryPokemonStore struct {
 func NewInMemoryPokemonStore() *InMemoryPokemonStore {
 	return &InMemoryPokemonStore{
 		map[string]string{
-			"1": "Bulbassaur",
+			"1": "Bulbasaur",
 			"2": "Ivysaur",
 		},
 	}
