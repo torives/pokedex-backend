@@ -17,6 +17,7 @@ func (s *PokedexServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	if name == "" {
 		w.WriteHeader(http.StatusNotFound)
+		fmt.Fprint(w, "Pokemon not found")
 	}
 
 	fmt.Fprint(w, name)
