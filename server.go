@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 )
@@ -25,7 +26,15 @@ func NewPokedexServer(store PokemonStore) *PokedexServer {
 }
 
 func (s *PokedexServer) pokemonListHandler(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusOK)
+	list := s.getPokemonList()
+	json.NewEncoder(w).Encode(list)
+}
+
+func (s *PokedexServer) getPokemonList() []Pokemon {
+	return []Pokemon{
+		{"Bulbasaur"},
+		{"Ivysaur"},
+	}
 }
 
 func (s *PokedexServer) pokemonNameHandler(w http.ResponseWriter, r *http.Request) {

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -50,6 +51,14 @@ func TestPokedex(t *testing.T) {
 		response := httptest.NewRecorder()
 
 		server.ServeHTTP(response, request)
+
+		var got []Pokemon
+
+		err := json.NewDecoder(response.Body).Decode(&got)
+
+		if err != nil {
+			t.Fatalf("Unable to parse response from server %q into slice of Pokemon, '%v'", response.Body, err)
+		}
 
 		assertStatusCode(t, response.Code, http.StatusOK)
 	})
