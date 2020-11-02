@@ -14,7 +14,7 @@ func TestPokedex(t *testing.T) {
 			"2": "Ivysaur",
 		},
 	}
-	server := &PokedexServer{&store}
+	server := NewPokedexServer(&store)
 
 	t.Run("returns 1st pokemon name", func(t *testing.T) {
 		request := newGetPokemonRequest("1")
@@ -44,11 +44,20 @@ func TestPokedex(t *testing.T) {
 
 		assertStatusCode(t, response.Code, http.StatusNotFound)
 	})
+
+	t.Run("returns 200 on /pokemons", func(t *testing.T) {
+		request, _ := http.NewRequest(http.MethodGet, "/pokemons", nil)
+		response := httptest.NewRecorder()
+
+		server.ServeHTTP(response, request)
+
+		assertStatusCode(t, response.Code, http.StatusOK)
+	})
 }
 
 func TestIntegration(t *testing.T) {
 	store := NewInMemoryPokemonStore()
-	server := PokedexServer{store}
+	server := NewPokedexServer(store)
 	index := "1"
 	response := httptest.NewRecorder()
 
@@ -59,7 +68,7 @@ func TestIntegration(t *testing.T) {
 }
 
 func newGetPokemonRequest(index string) *http.Request {
-	request, _ := http.NewRequest(http.MethodGet, fmt.Sprintf("/pokemon/%s", index), nil)
+	request, _ := http.NewRequest(http.MethodGet, fmt.Sprintf("/pokemons/%s", index), nil)
 	return request
 }
 
