@@ -95,10 +95,10 @@ func assertStatusCode(t *testing.T, got, want int) {
 }
 
 type StubPokemonStore struct {
-	scores map[string]string
+	pokemons map[string]string
 }
 
 func (s *StubPokemonStore) PokemonName(index string) string {
-	name := s.scores[index]
+	name := s.pokemons[index]
 	return name
 }
