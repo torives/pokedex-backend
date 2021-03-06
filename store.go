@@ -2,6 +2,7 @@ package main
 
 type PokemonStore interface {
 	PokemonName(index string) string
+	GetPokemonList() []Pokemon
 }
 
 type InMemoryPokemonStore struct {
@@ -19,4 +20,8 @@ func NewInMemoryPokemonStore() *InMemoryPokemonStore {
 
 func (i *InMemoryPokemonStore) PokemonName(index string) string {
 	return i.store[index]
+}
+
+func (i *InMemoryPokemonStore) GetPokemonList() []Pokemon {
+
 }

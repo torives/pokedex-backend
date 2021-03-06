@@ -33,7 +33,6 @@ func (s *PokedexServer) pokemonListHandler(w http.ResponseWriter, r *http.Reques
 func (s *PokedexServer) getPokemonList() []Pokemon {
 	return []Pokemon{
 		{"Bulbasaur"},
-		{"Ivysaur"},
 	}
 }
 

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"reflect"
 	"testing"
 )
 
@@ -14,6 +15,7 @@ func TestPokedex(t *testing.T) {
 			"1": "Bulbasaur",
 			"2": "Ivysaur",
 		},
+		nil,
 	}
 	server := NewPokedexServer(&store)
 
@@ -46,7 +48,15 @@ func TestPokedex(t *testing.T) {
 		assertStatusCode(t, response.Code, http.StatusNotFound)
 	})
 
-	t.Run("returns 200 on /pokemons", func(t *testing.T) {
+	t.Run("returns list of pokemons as JSON", func(t *testing.T) {
+
+		want := []Pokemon{
+			{"Bulbasaur"},
+			{"Ivysaur"},
+		}
+
+		store = StubPokemonStore{nil, want}
+
 		request, _ := http.NewRequest(http.MethodGet, "/pokemons", nil)
 		response := httptest.NewRecorder()
 
@@ -61,6 +71,10 @@ func TestPokedex(t *testing.T) {
 		}
 
 		assertStatusCode(t, response.Code, http.StatusOK)
+
+		if !reflect.DeepEqual(got, want) {
+			t.Errorf("got %v want %v", got, want)
+		}
 	})
 }
 
@@ -95,7 +109,8 @@ func assertStatusCode(t *testing.T, got, want int) {
 }
 
 type StubPokemonStore struct {
-	pokemons map[string]string
+	pokemons    map[string]string
+	pokemonList []Pokemon
 }
 
 func (s *StubPokemonStore) PokemonName(index string) string {
